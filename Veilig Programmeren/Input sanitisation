@@ -1,0 +1,6 @@
+//vunerable to xss
+echo "<div class='user-comment'>$content</div>";
+
+//immune to xss 
+$sanitized = htmlspecialchars($content);
+echo "<div class='user-comment'>$content</div>";

@@ -1,0 +1,37 @@
+<?php
+// Databaseverbinding instellen
+$host = 'localhost';
+$dbname = 'database_naam';
+$username = 'db_gebruiker';
+$password = 'db_wachtwoord';
+
+try {
+    // Verbind met de database
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Fout bij verbinding: " . $e->getMessage());
+}
+
+// Gebruikersinvoer ophalen
+$gebruikersnaam = $_POST['gebruikersnaam'];
+$wachtwoord = $_POST['wachtwoord'];
+
+// SQL-query met een prepared statement
+$sql = "SELECT * FROM gebruikers WHERE gebruikersnaam = :gebruikersnaam AND wachtwoord = :wachtwoord";
+$stmt = $pdo->prepare($sql);
+
+// Parameters binden aan de query
+$stmt->bindParam(':gebruikersnaam', $gebruikersnaam);
+$stmt->bindParam(':wachtwoord', $wachtwoord);
+
+// Query uitvoeren
+$stmt->execute();
+
+// Controleren of er een resultaat is
+if ($stmt->rowCount() > 0) {
+    echo "Login succesvol!";
+} else {
+    echo "Ongeldige gebruikersnaam of wachtwoord.";
+}
+?>

@@ -1,0 +1,9 @@
+//vulnerable to SQL injection
+$res = $sql->query("SELECT * FROM users WHERE username = '$username'");
+
+//invulnerable to SQL injection
+$stmt = $sql->prepare("SELECT * FROM users WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$res = $stmt-> get_result();
+
